@@ -1,0 +1,19 @@
+# Groups the auto-generated release notes by label.
+changelog:
+  exclude:
+    labels: [skip-changelog]
+  categories:
+    - title: New features
+      labels: [enhancement]
+    - title: Fixes
+      labels: [bug]
+    - title: Classification
+      labels: [classification]
+    - title: Performance
+      labels: [performance]
+    - title: Security and privacy
+      labels: [security]
+    - title: Documentation
+      labels: [documentation]
+    - title: Other changes
+      labels: ["*"]

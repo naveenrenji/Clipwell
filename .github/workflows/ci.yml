@@ -5,12 +5,26 @@ on:
     branches: [main]
   pull_request:
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
-    runs-on: macos-latest
+    name: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-14, macos-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - name: Build
         run: swift build -c release
       - name: Self-test
         run: ./Scripts/test.sh
+      - name: Package (universal app bundle)
+        run: INSTALL=0 UNIVERSAL=1 ./Scripts/bundle.sh

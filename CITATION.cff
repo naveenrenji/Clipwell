@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use Clipwell in your work, please cite it as below."
+title: "Clipwell"
+type: software
+authors:
+  - family-names: "Renji"
+    given-names: "Naveen Mathews"
+repository-code: "https://github.com/naveenrenji/Clipwell"
+license: MIT
+abstract: "A fast, private, open-source macOS menu-bar clipboard manager with search inside screenshots."
+keywords: [macos, clipboard-manager, swift, ocr, privacy]

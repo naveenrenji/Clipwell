@@ -34,6 +34,11 @@ enum Fmt {
     static func bytes(_ n: Int) -> String {
         ByteCountFormatter.string(fromByteCount: Int64(n), countStyle: .file)
     }
+
+    /// "1 line", "2 lines".
+    static func count(_ n: Int, _ noun: String) -> String {
+        "\(n) \(noun)\(n == 1 ? "" : "s")"
+    }
 }
 
 /// Turns pasteboard image bytes into the smallest faithful file to keep on disk.
