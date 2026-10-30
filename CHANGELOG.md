@@ -1,0 +1,14 @@
+# Changelog
+
+All notable changes to this project are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+
+## [Unreleased]
+
+### Added
+- Menu-bar clipboard history with global shortcut ⌃⌥V, opening at the text caret in a resizable window.
+- Full-text search over text, links, domains, source app, tags and on-device OCR text of images.
+- Automatic classification (text, URL, email, colour, code, JSON, number, path, image, files) with tags and metadata.
+- Paste (↩), copy without pasting (⌘C), plain-text variants, multi-item paste (⌘M), quick paste (⌘1–9), "Copy Again" menu.
+- Privacy: concealed/transient pasteboard types ignored, per-app exclusion, masked and auto-expiring secrets, owner-only data folder.
+- Reliability: synced writes, daily backups, integrity check with recovery, history and image-size limits.
+- Self-test suite, benchmark script and CI.
