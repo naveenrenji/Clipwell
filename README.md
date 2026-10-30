@@ -1,5 +1,9 @@
 # Clipwell
 
+<p align="center">
+  <img src="docs/banner.png" alt="Clipwell: remember everything you copy, find it in milliseconds, tell nobody" width="100%">
+</p>
+
 [![CI](https://github.com/naveenrenji/Clipwell/actions/workflows/ci.yml/badge.svg)](https://github.com/naveenrenji/Clipwell/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 ![macOS 14+](https://img.shields.io/badge/macOS-14%2B-lightgrey)
@@ -8,7 +12,12 @@
 
 A free, open-source, native macOS menu-bar app. Press **⌃⌥V** anywhere, type a few letters, and paste or copy back anything you copied before: text, links, code, files and images, including words that only appear *inside* a screenshot.
 
-Created by [Naveen Mathews Renji](https://github.com/naveenrenji). Requires macOS 14 or later and the Swift toolchain (Xcode, or the Command Line Tools via `xcode-select --install`).
+<p align="center">
+  <img src="docs/screenshot-search.png" alt="Searching for 'invoice' finds a note, a code snippet and a screenshot whose text was recognised on-device" width="760">
+</p>
+<p align="center"><em>Searching “invoice” finds the note, the code and a screenshot whose text was recognised on your Mac. (Made-up demo data.)</em></p>
+
+Created by [Naveen Mathews Renji](https://github.com/naveenrenji). Requires macOS 14 or later. Building from source needs the Swift toolchain (Xcode, or the Command Line Tools via `xcode-select --install`).
 
 ## Why it stands out
 
@@ -34,7 +43,15 @@ It exists because the usual complaints about clipboard managers are real: lost h
 
 Clipwell is young. [Maccy](https://maccy.app/) is a mature, popular open-source alternative and [ClipVault](https://eddmann.com/ClipVault) offers encryption at rest, which Clipwell does not have yet. What Clipwell adds is the combination above: screenshot search, secret expiry, multi-item paste, daily backups and caret-aware placement. Not here yet: encryption at rest, notarized downloads and sync across devices (sync is omitted on purpose, to keep everything local). See the [roadmap](ROADMAP.md).
 
-## Install
+## Download
+
+Get the latest universal build (Apple silicon and Intel) from the **[Releases page](https://github.com/naveenrenji/Clipwell/releases/latest)**: download `Clipwell-<version>.zip`, unzip it and drag **Clipwell.app** to your Applications folder.
+
+- **First launch.** Until releases are notarized by Apple, macOS asks you to approve the app once: open System Settings → Privacy & Security and click **Open Anyway**. Verify the download first with `shasum -a 256 -c Clipwell-<version>.zip.sha256`.
+- **Homebrew** (once the tap is published, see [docs/RELEASING.md](docs/RELEASING.md)): `brew install --cask naveenrenji/clipwell/clipwell`.
+- Prefer to read what you run? Build it yourself below; it takes under a minute.
+
+## Install from source
 
 ```bash
 git clone https://github.com/naveenrenji/Clipwell.git
@@ -125,7 +142,11 @@ Sources/Clipwell/
   Paster.swift        ⌘V injection and the global hotkey
   Settings.swift      user-adjustable limits and app lists
 Tests/                self-test and benchmark (no Xcode or XCTest needed)
-Scripts/              bundle.sh (build + install), test.sh, bench.sh
+Scripts/              bundle.sh (build, install, universal, sign), test.sh, bench.sh,
+                      make-assets.swift (icon and banner), setup-github.sh (maintainer setup)
+docs/                 RELEASING.md, banner and social preview images
+packaging/homebrew/   cask template for a Homebrew tap
+.github/              CI, release workflow, issue and PR templates, dependabot
 ```
 
 ## Contributing

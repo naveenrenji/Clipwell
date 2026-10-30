@@ -302,7 +302,7 @@ struct PreviewPane: View {
             row("Last used", Fmt.ago(item.lastUsedAt))
             row("Times copied", "\(item.useCount)")
             if item.kind != .image && item.kind != .files {
-                row("Size", "\(item.chars) chars · \(item.words) words · \(item.lines) lines")
+                row("Size", [Fmt.count(item.chars, "char"), Fmt.count(item.words, "word"), Fmt.count(item.lines, "line")].joined(separator: " · "))
             }
             row("Bytes", Fmt.bytes(item.bytes))
             if !item.tags.isEmpty {

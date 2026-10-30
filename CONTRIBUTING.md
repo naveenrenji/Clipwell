@@ -20,6 +20,7 @@ swift build                # debug build
 ./Scripts/test.sh          # self-tests (classifier, store, search, retention, backups, migration, image codec)
 ./Scripts/bench.sh 10000   # optional: timings on a throwaway database
 ./Scripts/bundle.sh        # build and install ~/Applications/Clipwell.app
+./Scripts/screenshot.sh docs/screenshot.png   # render the window with made-up data (for docs)
 ```
 
 Use your own app identifier when testing a fork so macOS permissions do not clash: `BUNDLE_ID=com.example.Clipwell ./Scripts/bundle.sh`.

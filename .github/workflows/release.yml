@@ -1,0 +1,76 @@
+name: Release
+
+# Push a tag like v0.2.0 to build a universal Clipwell.app, zip it and publish a GitHub Release.
+# Without the Apple secrets below the app is ad-hoc signed (users must approve it once in System
+# Settings). With them it is signed with a Developer ID and notarized. See docs/RELEASING.md.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: macos-latest
+    env:
+      MACOS_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE }}
+      MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+      APPLE_ID: ${{ secrets.APPLE_ID }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      APPLE_APP_PASSWORD: ${{ secrets.APPLE_APP_PASSWORD }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Self-test
+        run: ./Scripts/test.sh
+
+      - name: Import Developer ID certificate
+        if: env.MACOS_CERTIFICATE != ''
+        run: |
+          KEYCHAIN="$RUNNER_TEMP/build.keychain-db"
+          KEYCHAIN_PASSWORD="$(uuidgen)"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          echo "$MACOS_CERTIFICATE" | base64 --decode > "$RUNNER_TEMP/certificate.p12"
+          security import "$RUNNER_TEMP/certificate.p12" -k "$KEYCHAIN" -P "$MACOS_CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN"
+          security list-keychains -d user -s "$KEYCHAIN" login.keychain-db
+          IDENTITY="$(security find-identity -v -p codesigning "$KEYCHAIN" | grep 'Developer ID Application' | head -1 | sed -E 's/.*"(.+)"/\1/')"
+          echo "SIGN_IDENTITY=$IDENTITY" >> "$GITHUB_ENV"
+
+      - name: Build universal app
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+          INSTALL=0 UNIVERSAL=1 VERSION="$VERSION" OUT_DIR=dist ./Scripts/bundle.sh
+
+      - name: Zip
+        run: |
+          ditto -c -k --sequesterRsrc --keepParent dist/Clipwell.app "dist/Clipwell-$VERSION.zip"
+
+      - name: Notarize and staple
+        if: env.APPLE_ID != '' && env.SIGN_IDENTITY != ''
+        run: |
+          xcrun notarytool submit "dist/Clipwell-$VERSION.zip" \
+            --apple-id "$APPLE_ID" --team-id "$APPLE_TEAM_ID" --password "$APPLE_APP_PASSWORD" --wait
+          xcrun stapler staple dist/Clipwell.app
+          rm "dist/Clipwell-$VERSION.zip"
+          ditto -c -k --sequesterRsrc --keepParent dist/Clipwell.app "dist/Clipwell-$VERSION.zip"
+
+      - name: Checksum
+        run: |
+          cd dist
+          shasum -a 256 "Clipwell-$VERSION.zip" > "Clipwell-$VERSION.zip.sha256"
+
+      - name: Publish release
+        run: |
+          PRERELEASE=""
+          case "$VERSION" in *-*) PRERELEASE="--prerelease" ;; esac
+          gh release create "$GITHUB_REF_NAME" "dist/Clipwell-$VERSION.zip" "dist/Clipwell-$VERSION.zip.sha256" \
+            --title "Clipwell $VERSION" --generate-notes $PRERELEASE

@@ -3,10 +3,11 @@
 Honest list of what is missing and where help is most welcome. Ideas are tracked as issues; tick-boxes here are direction, not promises.
 
 ## Next
-- [ ] **Notarized releases** (signed with an Apple Developer ID) published on GitHub Releases, plus a Homebrew cask, so people do not need a toolchain.
+- [ ] **Notarized releases.** The release workflow already builds universal zips with checksums; signing with an Apple Developer ID and notarizing needs the secrets described in [docs/RELEASING.md](docs/RELEASING.md). Then publish the Homebrew tap (template in `packaging/homebrew`).
 - [ ] **Encryption at rest** for the database and images, with the key in the Keychain.
-- [ ] **Screenshots and a demo GIF** for the README.
-- [ ] Universal binary (Apple silicon and Intel) and a documented minimum macOS.
+- [x] README screenshots (rendered from made-up data by `Scripts/screenshot.sh`).
+- [ ] A short demo GIF of searching, pasting and multi-item paste (use made-up items, never real history).
+- [x] Universal binary (Apple silicon and Intel); macOS 14 is the minimum. Intel has been built but not run on real hardware yet; reports welcome.
 
 ## Soon
 - [ ] **Snippets**: saved, named pieces of text that are never pruned.
