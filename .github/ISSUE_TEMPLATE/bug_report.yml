@@ -1,0 +1,32 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! **Never paste real clipboard history, passwords or keys here.** Use made-up examples.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Example input
+      description: For a misclassified copy, paste a made-up example of the text and what kind you expected (text, URL, code, …).
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: "e.g. 15.1"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Clipwell version or commit
+      placeholder: "e.g. main @ a1b2c3d"
