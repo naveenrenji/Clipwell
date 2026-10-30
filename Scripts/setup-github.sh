@@ -52,7 +52,7 @@ echo "== Branch protection for main"
 # The maintainer (admin) can still push; contributors go through reviewed pull requests with passing CI.
 gh api -X PUT "repos/$REPO/branches/main/protection" --input - >/dev/null <<'JSON'
 {
-  "required_status_checks": { "strict": true, "contexts": ["macos-14", "macos-latest"] },
+  "required_status_checks": { "strict": true, "contexts": ["macos-15", "macos-latest"] },
   "enforce_admins": false,
   "required_pull_request_reviews": {
     "required_approving_review_count": 1,
